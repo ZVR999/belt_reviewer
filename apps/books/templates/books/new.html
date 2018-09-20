@@ -1,0 +1,51 @@
+{% extends 'book_reviews/layout.html' %}
+{% block head %} {% endblock %}
+{% block title %}Add Book and Review{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-10"></div>
+    <a href="/books" class="col-1">Home</a>
+    <a href="/users/logout" class="col-1">Logout</a>
+</div>
+<br>
+<h4>Add a New Book Title and a Review:</h4>
+<br>
+<div class="container">
+    <form action="/books/create" method="POST">
+        {% csrf_token %}
+        <label for="book_title">Book Title: </label>
+        <input type="text" name="book_title"> <br>
+        <label>Author: </label>
+        <div class="container row">
+            <label for="author">Choose from the list: </label>
+            <select name="author">
+                {% for author in authors %}
+                <option value="{{author.name}}">{{author.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div class="container row">
+            <label for="new_author">Or add a new author: </label>
+            <input type="text" name="new_author">
+        </div>
+        <br>
+        <label for="review">Review: </label>
+        <textarea name="review" cols="60" rows="6"></textarea>
+        <br>
+        <label for="rating">Rating: </label>
+        <input type="number" name="rating" min="1" max="5"> stars.
+        <br><br>
+        <input class="float-right" type="submit" value="Add Book and Review">
+    </form>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endblock %}
