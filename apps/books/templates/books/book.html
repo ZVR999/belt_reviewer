@@ -1,9 +1,99 @@
-{% extends 'book_reviews/layout.html' %}
-{% block head %} {% endblock %}
-{% block title %}Add Book and Review{% endblock %}
-{% block body %}
-<div class="row">
-    <a href="/books" class="ml-auto">Home</a>
-    <a href="/users/logout" class="">Logout</a>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'books/css/book.css' %}">
+    <title>Add Book and Review</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <a href="/books" class="ml-auto">Home</a>
+            <a href="/users/logout" class="">Logout</a>
+        </div>
+        <br>
+        <h4>{{book.name}}</h4>
+        <p>Author: {{book.author.name}}</p>
+        <div class="row">
+            <div class="col-6">
+                <h5>Reviews</h5>
+                {% for review in reviews %}
+                <hr>
+                <div class="container">
+                    {% if review.rating == 1 %}
+                    <p>Rating: <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span></p>
+                    {% elif review.rating == 2 %}
+                    <p>Rating: <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span></p>
+                    {% elif review.rating == 3 %}
+                    <p>Rating: <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span></p>
+                    {% elif review.rating == 4 %}
+                    <p>Rating: <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span></p>
+                    {% elif review.rating == 5 %}
+                    <p>Rating: <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span></p>
+                    {% endif %}
+                    <p><a href="/users/{{review.user.id}}">{{review.user.alias}}</a> says: {{review.review}}</p>
+                    <p>Posted on {{review.created_at}}</p>
+                    {% if review.user.alias == request.session.alias %}
+                    <a href="/reviews/{{review.id}}/delete" class="float-right">Delete this Review</a>
+                    {% endif %}
+                    <br>
+                </div>
+                {%empty%}
+                <p>No reviews</p>
+                {% endfor %}
+            </div>
+            <div class="col-1"></div>
+            <div class="col-5">
+                <form action="/reviews/create" method="POST">
+                    {% csrf_token %}
+                    <label for="review">Add a Review:</label><br>
+                    <textarea name="review" cols="40" rows="6"></textarea><br>
+                    <label for="rating">Rating:</label>
+                    <input type="number" name="rating" min="1" max="5"> stars.
+                    <input type="hidden" name="book_id" value="{{book.id}}">
+                    <input type="submit" class="float-right" value="Submit Review">
+                </form>
+                <br><br>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

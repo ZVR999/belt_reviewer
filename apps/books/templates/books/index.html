@@ -1,37 +1,83 @@
-{% extends 'book_reviews/layout.html' %}
-{% block head %} {% endblock %}
-{% block title %}Books Home{% endblock %}
-{% block body %}
-<br>
-<div class="row">
-    <h3 class="col-4">Welcome, {{request.session.alias}}!</h3>
-    <div class="col-3"></div>
-    <a href="/books/new" class="col-3">Add Book and Review</a>
-    <a href="/users/logout" class="col-2">Logout</a>
-</div>
-<br>
-<div class="row">
-    <div class="col-6">
-        <h4>Recent Book Reviews:</h4>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'books/css/index.css' %}">
+    <title>Books Home</title>
+</head>
+
+<body>
+    <div class="container">
         <br>
-        <div class="container">
-            Book Name
-            <div class="container">
-                rating
-                Review
-                posted on
+        <div class="row">
+            <h3 class="col-4">Welcome, {{request.session.alias}}!</h3>
+            <div class="col-3"></div>
+            <a href="/books/add" class="col-3">Add Book and Review</a>
+            <a href="/users/logout" class="col-2">Logout</a>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-6">
+                <h4>Recent Book Reviews:</h4>
+                <br>
+                <div class="container">
+                    {% for review in reviews %}
+                    <p><a href="/books/{{review.book.id}}">{{review.book.name}}</a></p>
+                    <div class="container">
+                        {% if review.rating == 1 %}
+                        <p>Rating: <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span></p>
+                        {% elif review.rating == 2 %}
+                        <p>Rating: <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span></p>
+                        {% elif review.rating == 3 %}
+                        <p>Rating: <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span></p>
+                        {% elif review.rating == 4 %}
+                        <p>Rating: <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span></p>
+                        {% elif review.rating == 5 %}
+                        <p>Rating: <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span></p>
+                        {% endif %}
+                        <p><a href="/users/{{review.user.id}}">{{review.user.name}}</a> says: {{review.review}}</p>
+                        <p>Posted on {{review.created_at}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-5">
+                <h4>Other Books with Reviews:</h4>
+                <br>
+                <div class="container border border-dark box">
+                    {% for book in books %}
+                    <a href="/books/{{book.id}}">{{book.name}}</a><br>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-1"></div>
-    <div class="col-5">
-        <h4>Other Books with Reviews:</h4>
-        <br>
-        <div class="container border border-dark">
-            <!-- for book in books -->
-            <a href="">Book Name</a>
-            <!-- endfor -->
-        </div>
-    </div>
-</div>
-{% endblock %}
+</body>

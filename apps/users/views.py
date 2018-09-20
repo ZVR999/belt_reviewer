@@ -2,14 +2,15 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from ..users.models import User
+from .models import User
+from ..reviews.models import Review
+from ..books.models import Book
 import bcrypt
 from django.contrib import messages
 # Create your views here.
 
 # Create a User
 def create(request):
-    request.session['user_id'] = 1
     errors = User.objects.basic_validator(request.POST)
     hashed_pw = bcrypt.hashpw(
         request.POST['password'].encode(), bcrypt.gensalt())
@@ -51,6 +52,16 @@ def login(request):
 
     return redirect('/')
 
+
+def show(request, user_id):
+    user = User.objects.get(id=user_id)
+    Review.objects.filter()
+    context = {
+        'user': User.objects.get(id=user_id),
+        'books': Review.objects.raw('SELECT DISTINCT "books_Book"."id", "books_Book"."name" FROM reviews_Review JOIN books_Book ON "reviews_Review"."book_id"="books_Book"."id" WHERE "reviews_Review"."user_id"='+str(user.id)+';')
+    }
+    request.session['total'] = Review.objects.filter(user=User.objects.filter(id=user_id)).count()
+    return render(request, 'users/user.html', context)
 
 def logout(request):
     request.session['alias'] = 'Please Login or Register'

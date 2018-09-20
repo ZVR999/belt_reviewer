@@ -21,7 +21,7 @@ class Review(models.Model):
     review = models.CharField(max_length=255)
     book = models.ForeignKey(Book, related_name='reviews')
     user = models.ForeignKey(User, related_name='reviews')
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = ReviewManager()
