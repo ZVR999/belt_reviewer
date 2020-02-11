@@ -19,8 +19,8 @@ class ReviewManager(models.Manager):
 class Review(models.Model):
     rating = models.IntegerField()
     review = models.CharField(max_length=255)
-    book = models.ForeignKey(Book, related_name='reviews')
-    user = models.ForeignKey(User, related_name='reviews')
+    book = models.ForeignKey(Book, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

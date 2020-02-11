@@ -22,7 +22,7 @@ class BookManager(models.Manager):
 
 class Book(models.Model):
     name = models.CharField(max_length=255)
-    author = models.ForeignKey(Author, related_name='books')
+    author = models.ForeignKey(Author, related_name='books',on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
